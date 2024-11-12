@@ -13,6 +13,8 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
 
 import chordax_dev_team.chordax_mailing.email.details.EmailDetails;
 
@@ -22,8 +24,14 @@ import chordax_dev_team.chordax_mailing.email.details.EmailDetails;
 //Implementing EmailService interface
 public class EmailServiceImpl implements EmailService {
 
-	@Autowired
 	private JavaMailSender javaMailSender;
+	private final TemplateEngine templateEngine;
+
+	@Autowired
+	EmailServiceImpl(JavaMailSender mailSender, TemplateEngine templateEngine) {
+		this.javaMailSender = mailSender;
+		this.templateEngine = templateEngine;
+	}
 
 	@Value("${spring.mail.username}")
 	private String sender;
@@ -67,10 +75,7 @@ public class EmailServiceImpl implements EmailService {
 			// Setting multipart as true for attachments to
 			// be send
 			mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
-			String msg = "<h1>Hello</h1>";
-
 			mimeMessageHelper.setFrom(sender);
-
 			mimeMessageHelper.setTo(details.getRecipient());
 			mimeMessageHelper.setText(details.getMsgBody());
 			mimeMessageHelper.setSubject(details.getSubject());
@@ -88,6 +93,27 @@ public class EmailServiceImpl implements EmailService {
 		// Catch block to handle MessagingException
 		catch (MessagingException e) {
 
+			// Display message when exception occurred
+			return "Error while sending mail!!!";
+		}
+	}
+
+	public String sendEmailWithHtmlTemplate(EmailDetails details) {
+		MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+		MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "UTF-8");
+		
+		Context context = new Context();
+		context.setVariable("message", details.getMsgBody());
+
+		try {
+			helper.setTo(details.getRecipient());
+			helper.setSubject(details.getSubject());
+			String htmlContent = templateEngine.process("welcome", context);
+			helper.setText(htmlContent, true);
+			javaMailSender.send(mimeMessage);
+			return "Mail sent Successfully";
+		} catch (MessagingException e) {
+			// Handle exception
 			// Display message when exception occurred
 			return "Error while sending mail!!!";
 		}
