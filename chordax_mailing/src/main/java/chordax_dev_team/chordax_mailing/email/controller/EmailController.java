@@ -41,7 +41,7 @@ public class EmailController {
 	}
 
 // 
-	@PostMapping("/send-html-email")
+	@PostMapping("/sendHtmlEmail")
 	public String sendHtmlEmail(@RequestBody EmailDetails details) {
 
 		String status = emailService.sendEmailWithHtmlTemplate(details);
