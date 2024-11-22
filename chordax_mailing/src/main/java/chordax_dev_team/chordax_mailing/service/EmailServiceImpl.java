@@ -1,6 +1,6 @@
 //Java Program to Illustrate Creation Of
 //Service implementation class
-package chordax_dev_team.chordax_mailing.email.service;
+package chordax_dev_team.chordax_mailing.service;
 
 //Importing required classes
 import java.io.File;
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
-import chordax_dev_team.chordax_mailing.email.details.EmailDetails;
+import chordax_dev_team.chordax_mailing.model.Email;
 
 //Annotation
 @Service
@@ -28,7 +28,7 @@ public class EmailServiceImpl implements EmailService {
 	private final TemplateEngine templateEngine;
 
 	@Autowired
-	EmailServiceImpl(JavaMailSender mailSender, TemplateEngine templateEngine) {
+	public EmailServiceImpl(JavaMailSender mailSender, TemplateEngine templateEngine) {
 		this.javaMailSender = mailSender;
 		this.templateEngine = templateEngine;
 	}
@@ -38,7 +38,7 @@ public class EmailServiceImpl implements EmailService {
 
 	// Method 1
 	// To send a simple email
-	public String sendSimpleMail(EmailDetails details) {
+	public String sendSimpleMail(Email details) {
 
 		// Try block to check for exceptions
 		try {
@@ -65,7 +65,7 @@ public class EmailServiceImpl implements EmailService {
 
 	// Method 2
 	// To send an email with attachment
-	public String sendMailWithAttachment(EmailDetails details) {
+	public String sendMailWithAttachment(Email details) {
 		// Creating a mime message
 		MimeMessage mimeMessage = javaMailSender.createMimeMessage();
 		MimeMessageHelper mimeMessageHelper;
@@ -98,7 +98,7 @@ public class EmailServiceImpl implements EmailService {
 		}
 	}
 
-	public String sendEmailWithHtmlTemplate(EmailDetails details) {
+	public String sendEmailWithHtmlTemplate(Email details) {
 		MimeMessage mimeMessage = javaMailSender.createMimeMessage();
 		MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "UTF-8");
 		
