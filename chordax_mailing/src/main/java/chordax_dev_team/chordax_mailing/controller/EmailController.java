@@ -2,47 +2,47 @@
 // Defines various API for Sending Mail
 package chordax_dev_team.chordax_mailing.controller;
 
-//Importing required classes
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-import chordax_dev_team.chordax_mailing.model.Email;
 import chordax_dev_team.chordax_mailing.service.EmailService;
+import org.springframework.web.multipart.MultipartFile;
 
-//Annotation
+
 @RestController
-//Class
+@RequestMapping("/send-email")
 public class EmailController {
 
 	@Autowired
 	private EmailService emailService;
 
-	// Sending a simple Email
-	@PostMapping("/sendMail")
-	public String sendMail(@RequestBody Email details) {
-		
-		String status = emailService.sendSimpleMail(details);
-
-		return status;
+	@PostMapping("/send")
+	public ResponseEntity<String> sendEmail(@RequestParam String recipient,
+											@RequestParam String subject,
+											@RequestParam String htmlBody) {
+		try {
+			emailService.sendEmail(recipient, subject, htmlBody);
+			return ResponseEntity.ok("Email sent successfully!");
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body("Failed to send email: " + e.getMessage());
+		}
 	}
 
-	// Sending email with attachment
-	@PostMapping("/sendMailWithAttachment")
-	public String sendMailWithAttachment(@RequestBody Email details) {
-		
-		String status = emailService.sendMailWithAttachment(details);
+	@PostMapping("/html")
+	public ResponseEntity<String> sendHtmlEmail(
+			@RequestParam String recipient,
+			@RequestParam String subject,
+			@RequestParam String htmlBody,
+			@RequestParam(required = false) MultipartFile attachment) {
 
-		return status;
-	}
-
-	// Sending email as formatted html 
-	@PostMapping("/sendHtmlEmail")
-	public String sendHtmlEmail(@RequestBody Email details) {
-
-		String status = emailService.sendEmailWithHtmlTemplate(details);
-		
-		return status;
+		try {
+			emailService.sendHtmlEmailWithAttachment(recipient, subject, htmlBody, attachment);
+			return ResponseEntity.ok("Email sent successfully!");
+		} catch (Exception e) {
+			return ResponseEntity.status(500).body("Failed to send email: " + e.getMessage());
+		}
 	}
 }
