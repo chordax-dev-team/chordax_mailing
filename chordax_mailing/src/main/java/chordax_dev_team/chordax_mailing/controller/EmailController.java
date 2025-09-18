@@ -12,7 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 
 @RestController
-@RequestMapping("/send-email")
+@RequestMapping("api/v1/email")
 public class EmailController {
 
 	@Autowired
@@ -31,7 +31,7 @@ public class EmailController {
 		}
 	}
 
-	@GetMapping("/html/{userId}/{songId}")
+	@GetMapping("/html-with-attachment/{userId}/{songId}")
 	public ResponseEntity<String> sendHtmlEmail(
 			@PathVariable Long userId,
 			@PathVariable Long songId) {
