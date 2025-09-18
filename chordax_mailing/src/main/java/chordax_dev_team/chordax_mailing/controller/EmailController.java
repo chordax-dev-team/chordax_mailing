@@ -31,15 +31,13 @@ public class EmailController {
 		}
 	}
 
-	@PostMapping("/html")
+	@GetMapping("/html/{userId}/{songId}")
 	public ResponseEntity<String> sendHtmlEmail(
-			@RequestParam String recipient,
-			@RequestParam String subject,
-			@RequestParam String htmlBody,
-			@RequestParam(required = false) MultipartFile attachment) {
+			@PathVariable Long userId,
+			@PathVariable Long songId) {
 
 		try {
-			emailService.sendHtmlEmailWithAttachment(recipient, subject, htmlBody, attachment);
+			emailService.sendHtmlEmailWithAttachment(userId, songId);
 			return ResponseEntity.ok("Email sent successfully!");
 		} catch (Exception e) {
 			return ResponseEntity.status(500).body("Failed to send email: " + e.getMessage());
