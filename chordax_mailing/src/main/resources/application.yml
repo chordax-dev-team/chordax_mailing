@@ -1,0 +1,25 @@
+spring:
+  application.name: chordax_mailing
+
+########################### H2 ############################################
+#----------- to set mailing -----------------
+  mail:
+    host: sandbox.smtp.mailtrap.io
+    port: 2525
+    username: 98e807f595b70b
+    password: a1ca3351bc4a7d
+    properties.mail:
+      smtp:
+        auth: true
+        starttls:
+          enable: true
+          required: true
+
+########################### PORT ############################################
+server.port: 8082
+
+########################### EUREKA ############################################
+eureka:
+  client.serviceUrl.defaultZone: http://localhost:8765/eureka
+  instance.preferIpAddress: true
+
