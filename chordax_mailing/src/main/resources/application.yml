@@ -1,6 +1,10 @@
 spring:
   application.name: chordax_mailing
 
+########################### CONFIG ############################################
+  config.import: optional:configserver:http://localhost:8888
+  cloud.config.uri: http://localhost:8888
+
 ########################### H2 ############################################
 #----------- to set mailing -----------------
   mail:
@@ -15,11 +19,10 @@ spring:
           enable: true
           required: true
 
-########################### PORT ############################################
-server.port: 8082
-
-########################### EUREKA ############################################
+################# EUREKA - SERVICE DISCOVERY ##########################
 eureka:
-  client.serviceUrl.defaultZone: http://localhost:8765/eureka
-  instance.preferIpAddress: true
+  client.serviceUrl.defaultZone:
+  instance.preferIpAddress:
 
+########################### PORT ############################################
+server.port:
