@@ -72,7 +72,7 @@ public class EmailService {
 			helper.addInline("chordaxLogo", image);
 
 			PDFDto attachment = restTemplate.getForObject(serviceURI, PDFDto.class);
-			if (attachment == null || attachment.data() == null) {
+			if (attachment.data() == null) {
 				throw new IllegalStateException("Failed to retrieve PDF attachment");
 			}
 
@@ -87,7 +87,17 @@ public class EmailService {
 			// Embed image using CID
 			// For email body (use plain UTF-8 string)
 			String htmlWithImage = String.format(
-					"<h3>Hello!</h3><p>Please, find attached a song <strong>\"%s\"</strong> from us, created as you wanted.</p><hr><p style='margin-bottom:0;'>Being there for your disposal</p><img src='cid:chordaxLogo' width='123' height='39'>",
+					"<html style='font-family: Arial, sans-serif;'>" +
+							"<h3>Hello!</h3>" +
+							"<p>Please, find attached a song <strong>\"%s\"</strong> from us, created as you wanted.</p>" +
+							"<hr>" +
+							"<div style='width:fit-content; text-align:center;'>" +
+								"<p style='margin-bottom:10px;'>" +
+									"<small>Being there for your disposal</small>" +
+								"</p>" +
+								"<img src='cid:chordaxLogo' width='123' height='39'>" +
+							"</div>" +
+					"</html>",
 					attachment.title()
 			);
 			helper.setText(htmlWithImage, true); // true = HTML
