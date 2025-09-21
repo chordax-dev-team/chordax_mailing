@@ -1,12 +1,17 @@
 spring:
-  application.name: chordax_mailing
 
 ########################### CONFIG ############################################
   config.import: optional:configserver:http://localhost:8888
   cloud.config.uri: http://localhost:8888
 
-########################### H2 ############################################
-#----------- to set mailing -----------------
+  ### WHAT CONFIGURED:
+  ###### - EUREKA - SERVICE DISCOVERY - CLIENT
+  ###### - PORT
+
+########################### APP'S NAME ############################################
+  application.name: chordax_mailing
+
+########################### MAILING ############################################
   mail:
     host: sandbox.smtp.mailtrap.io
     port: 2525
@@ -18,11 +23,3 @@ spring:
         starttls:
           enable: true
           required: true
-
-################# EUREKA - SERVICE DISCOVERY ##########################
-eureka:
-  client.serviceUrl.defaultZone:
-  instance.preferIpAddress:
-
-########################### PORT ############################################
-server.port:
